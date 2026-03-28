@@ -16,6 +16,7 @@ QT += core gui xml widgets
 QMAKE_CXXFLAGS += -pedantic -Wno-long-long -Wno-unused-local-typedefs -g
 CONFIG += release warn_on stl qt
 macx:CONFIG += x86_64 arm64           # Universal Binary for macOS (Intel + Apple Silicon)
+macx:ICON = gui/images/gaussianbeam.icns # macOS app icon
 win32:RC_FILE = gui/GaussianBeam.rc   # Embed the application icon
 CODECFORTR     = UTF-8
 CODECFORSRC    = UTF-8
