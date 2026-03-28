@@ -7,3 +7,5 @@ qrc_*
 ui_*h
 Makefile
 gaussianbeam
+gaussianbeam.app/
+*.zip
