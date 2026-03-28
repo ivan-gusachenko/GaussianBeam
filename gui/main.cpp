@@ -21,7 +21,9 @@
 #include "gui/Names.h"
 
 #include <QApplication>
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #include <QTextCodec>
+#endif
 #include <QTranslator>
 #include <QLibraryInfo>
 

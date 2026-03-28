@@ -30,7 +30,7 @@ PropertyEditor::PropertyEditor(QList<EditorProperty>& properties, QWidget* paren
 	: QWidget(parent)
 {
 	QVBoxLayout *layout = new QVBoxLayout(this);
-	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->setSpacing(0);
 
 	foreach (EditorProperty property, properties)

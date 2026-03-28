@@ -28,7 +28,9 @@
 #include <QMessageBox>
 #include <QStandardItemModel>
 #include <QtXml/QDomDocument>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QtXmlPatterns/QXmlQuery>
+#endif
 
 /**************************************************************
 Change log for GaussianBeam files. All this changes are coded in XSL-T documents
@@ -87,6 +89,7 @@ GaussianBeam 0.5 (1.2)
 
 void GaussianBeamWindow::convertFormat(QByteArray* data, const QString& xsltPath) const
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	QXmlQuery query(QXmlQuery::XSLT20);
 	QByteArray convertedData;
 	QBuffer inputBuffer(data);
@@ -106,6 +109,11 @@ void GaussianBeamWindow::convertFormat(QByteArray* data, const QString& xsltPath
 	outputBuffer.close();
 	inputBuffer.close();
 	*data = convertedData;
+#else
+	// Qt6: QtXmlPatterns removed, skip format conversion
+	// Applications should use current file format
+	Q_UNUSED(xsltPath);
+#endif
 }
 
 bool GaussianBeamWindow::parseFile(const QString& fileName)

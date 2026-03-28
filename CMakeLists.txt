@@ -1,15 +1,14 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.16)
 project(GaussianBeam)
 
 # Dependencies
-set(QT_MIN_VERSION "4.5.0")
-find_package(Qt4 COMPONENTS QtCore QtGui QtXml QtXmlPatterns REQUIRED)
-include(${QT_USE_FILE})
+set(QT_MIN_VERSION "6.5.0")
+find_package(Qt6 COMPONENTS Core Gui Xml Widgets REQUIRED)
 
 # Platform options
 if(APPLE)
-	set(CMAKE_OSX_ARCHITECTURES i386 ppc)   # Cuild universal library
-	set(CMAKE_OSX_DEPLOYMENT_TARGET 10.4)   # Minimum version required
+	set(CMAKE_OSX_ARCHITECTURES x86_64 arm64)   # Universal binary (Intel + Apple Silicon)
+	set(CMAKE_OSX_DEPLOYMENT_TARGET 11.0)        # Minimum version required (arm64 needs 11.0+)
 endif (APPLE)
 
 # Compiler options
@@ -24,15 +23,15 @@ set(gaussianbeam_src_SRCS src/GaussianBeam.cpp src/Optics.cpp src/OpticsBench.cp
 set(gaussianbeam_gui_SRCS gui/GaussianBeamWidget.cpp gui/OpticsView.cpp gui/OpticsWidgets.cpp gui/GaussianBeamDelegate.cpp
                           gui/GaussianBeamModel.cpp gui/GaussianBeamWindow.cpp gui/Unit.cpp gui/Names.cpp
                           gui/GaussianBeamSave.cpp gui/GaussianBeamLoad.cpp gui/main.cpp)
-qt4_wrap_ui(gaussianbeam_ui_SRCS gui/GaussianBeamWidget.ui gui/GaussianBeamWindow.ui gui/OpticsViewProperties.ui)
-qt4_wrap_cpp(gaussianbeam_moc_SRCS gui/GaussianBeamDelegate.h gui/GaussianBeamDelegate.h gui/GaussianBeamModel.h
+qt6_wrap_ui(gaussianbeam_ui_SRCS gui/GaussianBeamWidget.ui gui/GaussianBeamWindow.ui gui/OpticsViewProperties.ui)
+qt6_wrap_cpp(gaussianbeam_moc_SRCS gui/GaussianBeamDelegate.h gui/GaussianBeamDelegate.h gui/GaussianBeamModel.h
                                    gui/GaussianBeamWidget.h gui/GaussianBeamWindow.h gui/OpticsView.h gui/OpticsView.h gui/OpticsWidgets.h)
-qt4_add_resources(gaussianbeam_rc_SRCS gui/GaussianBeam.qrc)
+qt6_add_resources(gaussianbeam_rc_SRCS gui/GaussianBeam.qrc)
 set(gaussianbeam_SRCS ${gaussianbeam_src_SRCS} ${gaussianbeam_gui_SRCS} ${gaussianbeam_ui_SRCS} ${gaussianbeam_moc_SRCS} ${gaussianbeam_rc_SRCS})
 
 # Translations. They are generated in the binary directory and are moved to the po/ source directory
 # so that they are accessible to the ressource file
-qt4_create_translation(gaussianbeam_qm_SRCS gui po/GaussianBeam_fr.ts)
+qt6_create_translation(gaussianbeam_qm_SRCS gui po/GaussianBeam_fr.ts)
 add_custom_target(translations COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/*.qm ${CMAKE_CURRENT_SOURCE_DIR}/po/ DEPENDS ${gaussianbeam_qm_SRCS})
 
 # Embed the application icon in the Windows executable
@@ -45,7 +44,7 @@ endif(MINGW)
 
 # gaussianbeam executable
 add_executable(gaussianbeam ${gaussianbeam_SRCS})
-target_link_libraries(gaussianbeam ${QT_LIBRARIES})
+target_link_libraries(gaussianbeam Qt6::Core Qt6::Gui Qt6::Xml Qt6::Widgets)
 add_dependencies(gaussianbeam translations)
 add_custom_command(TARGET gaussianbeam POST_BUILD COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_SOURCE_DIR}/po/*.qm)
 
